@@ -1,6 +1,7 @@
+import React from 'react';
 import { Navigate } from "react-router-dom";
 import PageNotFound from "../components/NotFound/PageNotFound";
-import { UserDashboard } from "../pages/dashboard";
+import { RetailerDashboard } from "../pages/dashboard";
 import { UserLandingPage } from "../pages/landingPage";
 
 const childRoutes = [
@@ -10,7 +11,7 @@ const childRoutes = [
   },
   {
     path: "",
-    element: <UserDashboard />,
+    element: <RetailerDashboard />,
   },
   {
     path: "/landingPage",
