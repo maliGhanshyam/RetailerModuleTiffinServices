@@ -9,11 +9,39 @@ import "slick-carousel/slick/slick-theme.css";
 import {Organization} from "../../Types/Organization/Organization"
 import { getOrganizations } from '../../Service/OrganisationService/OrganizationService';
 import OrganisationCard from '../../components/OrganisationCardComp/OrganisationCard';
-import { getAllOrders, getAllTiffins } from "../../Service/TiffinService.ts/TiffinService";
+import { getAllOrders, getAllTiffins, getOrderRequests } from "../../Service/TiffinService.ts/TiffinService";
+import { Order } from '../../Types';
+import { getMonthlyOrders } from '../../Service/OrderService/OrderService';
 const RetailerDashboard = () => {
   const [organizations, setOrganizations] = useState<Organization[]>([]);
   const [totalOrders, setTotalOrders] = useState(0);
   const [totalTiffins, setTotalTiffins] = useState(0);
+    const [pendingOrders, setPendingOrders] = useState(0);
+    const [approvedOrders, setApprovedOrders] = useState(0);
+  const [rejectedOrders, setRejectedOrders] = useState(0);
+  
+  
+const getOrderData = async () => {
+  try {
+    const statuses = ["pending", "delivered", "rejected"];
+    const results = await Promise.all(
+      statuses.map(async (status) => {
+        const { data, pagination } = await getOrderRequests(status);
+        console.log(`Fetched ${status} Orders:`, data);
+        return { status, data, count: pagination.totalItems };
+      })
+    );
+
+    results.forEach(({ status, count }) => {
+      if (status === "pending") setPendingOrders(count);
+      if (status === "delivered") setApprovedOrders(count);
+      if (status === "rejected") setRejectedOrders(count);
+    });
+  } catch (error) {
+    console.error("Error fetching orders by status:", error);
+  }
+};
+
   
   const fetchAllOrders = async () => { 
     const response = await getAllOrders();
@@ -39,6 +67,8 @@ const RetailerDashboard = () => {
     fetchOrganizations();
     fetchAllOrders();
     fetchAllTiffins();
+    getOrderData();
+    getMonthlyOrders(2024);
   },[]);
 
   const papers = [
@@ -83,7 +113,7 @@ const RetailerDashboard = () => {
       sx={{
         "@media (min-width: 1200px)": {
           maxWidth: "none", // Remove the max-width for large screens
-          margin:"12px"
+          margin: "12px",
         },
       }}
     >
@@ -96,9 +126,9 @@ const RetailerDashboard = () => {
       </Grid>
       <PieChartComponent
         chartData={[
-          { name: "Pending", value: 29 },
-          { name: "Approved", value: 12 },
-          { name: "Rejected", value: 28 },
+          { name: "Pending", value: pendingOrders },
+          { name: "Approved", value: approvedOrders },
+          { name: "Rejected", value: rejectedOrders },
         ]}
       ></PieChartComponent>
       {/*TODO:}
@@ -119,15 +149,7 @@ const RetailerDashboard = () => {
           <Typography variant="h5" fontWeight="bold" mb={2}>
             Available Organizations
           </Typography>
-          <Button
-            variant="outlined" // Uses the default variant from the theme
-            color="primary" // Uses the primary color defined in the theme
-            size="small" // Uses the default size defined in the theme
-            startIcon={<VisibilityIcon />} // Adds the icon
-            // onClick={() => navigate("/supAdmin")} // Navigation logic
-          >
-            View More
-          </Button>
+    
         </Box>
         <Slider {...settings}>
           {organizations.map((org) => (
@@ -150,8 +172,7 @@ const RetailerDashboard = () => {
                     onClick: () => {
                       console.log("Register");
                       alert("Register success");
-                  },
-
+                    },
                   },
                   // {
                   //   label: "Delete",
