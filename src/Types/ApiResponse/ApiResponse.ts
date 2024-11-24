@@ -4,6 +4,7 @@ import { User } from "../User/User";
 import { Cart } from "../Tiffins/Cart";
 import { Order } from "../Tiffins/Order";
 import { Tiffin } from "../Tiffins/Tiffin";
+import { MonthlyOrderData } from "../Order/OrderSummary";
 
 export interface UserApiResponse {
   statusCode: number;
@@ -31,4 +32,9 @@ export interface TiffinApiResponse {
   message: string;
   data: Tiffin[];
   pagination: Pagination;
+}
+
+export interface OrderSummaryApiResponse {
+  statuscode: number;
+  data: MonthlyOrderData[];
 }
