@@ -19,6 +19,11 @@ import { styles } from "./Login.style";
 import { RETAILER_ID } from "../../constants/ROLES";
 import { LoginUser } from "../../services/LoginService/LoginUser";
 import { useSnackbar } from "../../hook";
+import {
+  Visibility,
+  VisibilityOff,
+  VisibilityOffOutlined,
+} from "@mui/icons-material";
 
 const LoginForm = () => {
   const dispatch = useDispatch();
@@ -132,7 +137,13 @@ const LoginForm = () => {
                               <IconButton
                                 onClick={() => setShowPassword(!showPassword)}
                                 edge="end"
-                              ></IconButton>
+                              >
+                                {showPassword ? (
+                                  <Visibility />
+                                ) : (
+                                  <VisibilityOffOutlined />
+                                )}
+                              </IconButton>
                             </InputAdornment>
                           ),
                         }}

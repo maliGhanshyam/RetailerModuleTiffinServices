@@ -16,11 +16,7 @@ const childRoutes = [
   },
   {
     path: "addTiffin",
-    element: (
-      <ProtectedRoute requiredRole={RETAILER_ID}>
-        <AddTiffinForm />
-      </ProtectedRoute>
-    ),
+    element: <AddTiffinForm />,
   },
   {
     path: "*",
