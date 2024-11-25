@@ -28,3 +28,16 @@ export const getOrganizations = async (): Promise<Organization[]> => {
     throw error;
   }
 };
+
+
+// xport const registerRetailer = async (_id: string): Promise<void> => {
+//   try {
+//     const url = `${API_URL}/superadmin/approveadmin/${admin_id}`;
+//     console.log("Approving admin with URL:", url);
+//     await axiosInstance.put(url, {}); // Empty body for PUT request
+//     console.log(`Admin with ID ${admin_id} approved successfully`);
+//   } catch (error) {
+//     console.error("Failed to approve admin:", error);
+//     throw error;
+//   }
+// };
