@@ -72,8 +72,7 @@ const RetailerRegistration = () => {
         .oneOf([Yup.ref("password")], "Passwords must match")
         .required("Confirm Password is required"),
         gst_no:Yup.string().matches(
-        /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[0-9]{1}[A-Z]{1}[0-9]{1}$/
-        )
+        /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[0-9]{1}[A-Z]{1}[0-9]{1}$/,"Must matches GST format 22AAAAA0000A1Z5" )
     .required("GST no is required")
     }),
     onSubmit: async (values, actions) => {
