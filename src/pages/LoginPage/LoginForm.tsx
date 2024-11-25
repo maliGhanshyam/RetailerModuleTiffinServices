@@ -16,14 +16,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setAuthData } from "../../store/authSlice";
 import { styles } from "./Login.style";
-import { RETAILER_ID } from "../../constants/ROLES";
-import { LoginUser } from "../../services/LoginService/LoginUser";
 import { useSnackbar } from "../../hook";
-import {
-  Visibility,
-  VisibilityOff,
-  VisibilityOffOutlined,
-} from "@mui/icons-material";
+import { Visibility, VisibilityOffOutlined } from "@mui/icons-material";
+import { loginUser } from "../../services/LoginService/loginUser";
+import { RETAILER_ROLE_ID } from "../../constants/ROLES";
 
 const LoginForm = () => {
   const dispatch = useDispatch();
@@ -51,7 +47,7 @@ const LoginForm = () => {
     { setSubmitting }: FormikHelpers<{ email: string; password: string }>
   ) => {
     try {
-      const response = await LoginUser(loginData.email, loginData.password);
+      const response = await loginUser(loginData.email, loginData.password);
       if (
         response.success &&
         (response as { token?: string }).token &&
@@ -65,7 +61,7 @@ const LoginForm = () => {
           })
         );
         showSnackbar("Login successful", "success");
-        navigate(response.role_id === RETAILER_ID ? "/landingPage" : "*");
+        navigate(response.role_id === RETAILER_ROLE_ID ? "/landingPage" : "*");
       } else {
         showSnackbar("Invalid credentials", "error");
       }

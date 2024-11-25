@@ -3,7 +3,7 @@ import { Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/Store";
 import { setAuthData } from "../store/authSlice";
-import { RETAILER_ID } from "../constants/ROLES";
+import {  RETAILER_ROLE_ID } from "../constants/ROLES";
 import axiosInstance from "../services/TiffinService/axiosInstance";
 const API_URL = process.env.REACT_APP_API_URL;
 interface AuthGuardProps {
@@ -48,7 +48,7 @@ const ProtectedRoute: FC<AuthGuardProps> = ({
 
   // Redirect logic for guest-only routes
   if (guestOnly && token) {
-    if (userRoleId === RETAILER_ID) {
+    if (userRoleId === RETAILER_ROLE_ID) {
       console.log("in retailer route");
       // return <Navigate to="/retailerDashboard" replace />;
     }
