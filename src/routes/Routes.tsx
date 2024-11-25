@@ -1,9 +1,13 @@
 import { Navigate } from "react-router-dom";
 import PageNotFound from "../components/NotFound/PageNotFound";
-import { LoginForm } from "../pages/LoginPage";
 import AddTiffinForm from "../pages/AddTiffinPage/AddTiffinForm";
+import { RetailerRegistration } from "../pages/RetailerRegistration";
+import { Order } from "../pages/Order";
 import ProtectedRoute from "./ProtectedRoute";
-import { RETAILER_ID } from "../constants/ROLES";
+import { ProfileUpdate } from "../pages/ProfileUpdate";
+import { LoginForm } from "../pages/LoginPage";
+import { TiffinTable } from "../pages/TiffinTable";
+import { RETAILER_ROLE_ID } from "../constants/ROLES";
 
 const childRoutes = [
   {
@@ -21,6 +25,31 @@ const childRoutes = [
   {
     path: "*",
     element: <PageNotFound />,
+  },
+  {
+    path: "register",
+    element: <RetailerRegistration />,
+  },
+  {
+    path: "order",
+    element: <Order />,
+  },
+  {
+    path: "tiffin",
+    element: <TiffinTable />,
+  },
+
+  {
+    path: "update-profile",
+    element: (
+      <ProtectedRoute requiredRole={RETAILER_ROLE_ID}>
+        <ProfileUpdate />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "",
+    element: <Navigate to="login" />,
   },
 ];
 

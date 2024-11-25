@@ -1,0 +1,1 @@
+export { registerAdmin,getUserByToken,uploadUserImage,updateProfile } from "./Auth";
