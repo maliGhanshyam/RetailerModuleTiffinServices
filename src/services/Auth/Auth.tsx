@@ -89,10 +89,10 @@ export const updateProfile = async (
   }: Profile
 ): Promise<ProfileResponse> => {
   try {
-    const approval = {
+    const approval = [{
       approval_status:approval_status,
       organization_id: organization_id,
-    }
+    }]
     const role_specific_details = {
       gst_no:gst_no,
       approval:approval

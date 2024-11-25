@@ -71,7 +71,7 @@ export default function Order() {
         page + 1,
         limit
       );
-      setOrders(data|| []);
+      setOrders(data || []);
       setTotalItems(totalItems);
       setTotalPages(totalPages);
     } catch (error) {
