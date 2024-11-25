@@ -33,4 +33,7 @@ export const styles: { [key: string]: SxProps<Theme> } = {
     marginTop: "50px",
     gap: "30px",
   },
+  loginImageStyles: {
+    width: "100%",
+  },
 };

@@ -7,7 +7,6 @@ import {
   Grid2,
   IconButton,
   InputAdornment,
-  Snackbar,
   TextField,
   Typography,
 } from "@mui/material";
@@ -16,12 +15,11 @@ import * as Yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setAuthData } from "../../store/authSlice";
-import { loginUser } from "../../services/LoginService/loginUser";
-import { SUPERADMIN_ROLE_ID } from "../../constants/ROLES";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { styles } from "./Login.style";
 import { useSnackbar } from "../../hook";
+import { Visibility, VisibilityOffOutlined } from "@mui/icons-material";
+import { loginUser } from "../../services/LoginService/loginUser";
+import { RETAILER_ROLE_ID } from "../../constants/ROLES";
 
 const LoginForm = () => {
   const dispatch = useDispatch();
@@ -63,11 +61,7 @@ const LoginForm = () => {
           })
         );
         showSnackbar("Login successful", "success");
-        navigate(
-          response.role_id === SUPERADMIN_ROLE_ID
-            ? "/superAdminDashboard"
-            : "/adminDashboard"
-        );
+        navigate(response.role_id === RETAILER_ROLE_ID ? "/landingPage" : "*");
       } else {
         showSnackbar("Invalid credentials", "error");
       }
@@ -81,9 +75,11 @@ const LoginForm = () => {
     <Container component="div">
       <Grid2 sx={styles.containerGrid}>
         <Grid2 size={5} sx={styles.svgGrid}>
-          <img
+          <Box
+            component="img"
             src="https://emp.neosofttech.com/assets/a9ba8aa/assets/images/login/login_bg.svg"
             alt="Loginpic"
+            sx={styles.loginImageStyles}
           />
         </Grid2>
         <Grid2 size={{ sm: 4 }}>
@@ -139,9 +135,9 @@ const LoginForm = () => {
                                 edge="end"
                               >
                                 {showPassword ? (
-                                  <VisibilityIcon />
+                                  <Visibility />
                                 ) : (
-                                  <VisibilityOffIcon />
+                                  <VisibilityOffOutlined />
                                 )}
                               </IconButton>
                             </InputAdornment>

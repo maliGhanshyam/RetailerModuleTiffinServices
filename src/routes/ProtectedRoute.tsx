@@ -3,8 +3,8 @@ import { Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/Store";
 import { setAuthData } from "../store/authSlice";
-import { SUPERADMIN_ROLE_ID, ADMIN_ROLE_ID } from "../constants/ROLES";
-import axiosInstance from "../services/Interceptor/axiosInstance";
+import {  RETAILER_ROLE_ID } from "../constants/ROLES";
+import axiosInstance from "../services/TiffinService/axiosInstance";
 const API_URL = process.env.REACT_APP_API_URL;
 interface AuthGuardProps {
   children: ReactNode;
@@ -33,9 +33,13 @@ const ProtectedRoute: FC<AuthGuardProps> = ({
       const response = await axiosInstance.get(
         `${API_URL}/auth/getuserbytoken`
       );
-      const { _id, role_id } = response.data.data;
-      if (_id && role_id) {
-        dispatch(setAuthData({ userRoleId: role_id, userId: _id }));
+      if (response.data.data._id && response.data.data.role_id) {
+        dispatch(
+          setAuthData({
+            userRoleId: response.data.data.role_id,
+            userId: response.data.data._id,
+          })
+        );
       }
     } catch (error) {
       console.error("Error fetching user by token:", error);
@@ -44,10 +48,9 @@ const ProtectedRoute: FC<AuthGuardProps> = ({
 
   // Redirect logic for guest-only routes
   if (guestOnly && token) {
-    if (userRoleId === SUPERADMIN_ROLE_ID) {
-      return <Navigate to="/superAdminDashboard" replace />;
-    } else if (userRoleId === ADMIN_ROLE_ID) {
-      return <Navigate to="/adminDashboard" replace />;
+    if (userRoleId === RETAILER_ROLE_ID) {
+      console.log("in retailer route");
+      // return <Navigate to="/retailerDashboard" replace />;
     }
   }
 

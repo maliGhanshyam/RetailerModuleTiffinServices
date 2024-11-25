@@ -19,7 +19,7 @@ import { style, styles } from "./Navbar.styles";
 import { useDispatch, useSelector } from "react-redux";
 import { clearAuthData } from "../../store/authSlice";
 import { RootState } from "../../store/Store";
-import { ADMIN_ROLE_ID, RETAILER_ROLE_ID, SUPERADMIN_ROLE_ID } from "../../constants/ROLES";
+import { RETAILER_ROLE_ID } from "../../constants/ROLES";
 import { useSnackbar } from "../../hook";
 import { Theme } from "../materialUI";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
@@ -61,21 +61,28 @@ const Navbar = () => {
             </ListItem>
             {userRoleId === RETAILER_ROLE_ID && (
               <>
-              <ListItem
-                component={Link}
-                to="/tiffin"
-                sx={styles.listItemStyle}
-              >
-                <ListItemText primary="Tiffins" />
-              </ListItem>
-              <ListItem
-              component={Link}
-              to="/order"
-              sx={styles.listItemStyle}
-            >
-              <ListItemText primary="Orders" />
-            </ListItem>
-            </>
+                <ListItem
+                  component={Link}
+                  to="/tiffin"
+                  sx={styles.listItemStyle}
+                >
+                  <ListItemText primary="Tiffins" />
+                </ListItem>
+                <ListItem
+                  component={Link}
+                  to="/order"
+                  sx={styles.listItemStyle}
+                >
+                  <ListItemText primary="Orders" />
+                </ListItem>
+                <ListItem
+                  component={Link}
+                  to="/addTiffin"
+                  sx={styles.listItemStyle}
+                >
+                  <ListItemText primary="Add Tiffins" />
+                </ListItem>
+              </>
             )}
           </>
         )}
@@ -118,23 +125,31 @@ const Navbar = () => {
                 </Button>
                 {token && userRoleId === RETAILER_ROLE_ID && (
                   <>
-                  <Button
-                    color="inherit"
-                    component={Link}
-                    to="/tiffin"
-                    sx={styles.button}
-                  >
-                    Tiffins
-                  </Button>
-                  <Button
-                  color="inherit"
-                  component={Link}
-                  to="/order"
-                  sx={styles.button}
-                >
-                  Orders
-                </Button>
-                </>
+                    <Button
+                      color="inherit"
+                      component={Link}
+                      to="/tiffin"
+                      sx={styles.button}
+                    >
+                      Tiffins
+                    </Button>
+                    <Button
+                      color="inherit"
+                      component={Link}
+                      to="/order"
+                      sx={styles.button}
+                    >
+                      Orders
+                    </Button>
+                    <Button
+                      color="inherit"
+                      component={Link}
+                      to="/addTiffin"
+                      sx={styles.button}
+                    >
+                      Add Tiffins
+                    </Button>
+                  </>
                 )}
               </>
             )}

@@ -3,7 +3,9 @@ import { Snackbar, Alert } from "@mui/material";
 import { AlertColor } from "@mui/material";
 import { SnackbarContextProps } from "./SnackbarProvider.types";
 
-export const SnackbarContext = createContext<SnackbarContextProps | undefined>(undefined);
+export const SnackbarContext = createContext<SnackbarContextProps | undefined>(
+  undefined
+);
 
 export const SnackbarProvider = ({ children }: { children: ReactNode }) => {
   const [snackbar, setSnackbar] = useState<{
