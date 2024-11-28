@@ -14,7 +14,7 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import tiff3 from "../../assets/tiff3.png";
-import { getToken, logoutUser } from "../../services/LoginService/loginUser";
+// import { getToken, logoutUser } from "../../services/LoginService/loginUser";
 import { style, styles } from "./Navbar.styles";
 import { useDispatch, useSelector } from "react-redux";
 import { clearAuthData } from "../../store/authSlice";
@@ -23,6 +23,7 @@ import { RETAILER_ROLE_ID } from "../../constants/ROLES";
 import { useSnackbar } from "../../hook";
 import { Theme } from "../materialUI";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { getToken, logoutUser } from "../../services/LoginService/LoginUser";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
@@ -59,8 +60,6 @@ const Navbar = () => {
             >
               <ListItemText primary="Home" />
             </ListItem>
-            {userRoleId === RETAILER_ROLE_ID && (
-              <>
                 <ListItem
                   component={Link}
                   to="/tiffin"
@@ -82,8 +81,6 @@ const Navbar = () => {
                 >
                   <ListItemText primary="Add Tiffins" />
                 </ListItem>
-              </>
-            )}
           </>
         )}
         {location !== "/login" && (
@@ -123,34 +120,30 @@ const Navbar = () => {
                 >
                   Home
                 </Button>
-                {token && userRoleId === RETAILER_ROLE_ID && (
-                  <>
-                    <Button
-                      color="inherit"
-                      component={Link}
-                      to="/tiffin"
-                      sx={styles.button}
-                    >
-                      Tiffins
-                    </Button>
-                    <Button
-                      color="inherit"
-                      component={Link}
-                      to="/order"
-                      sx={styles.button}
-                    >
-                      Orders
-                    </Button>
-                    <Button
-                      color="inherit"
-                      component={Link}
-                      to="/addTiffin"
-                      sx={styles.button}
-                    >
-                      Add Tiffins
-                    </Button>
-                  </>
-                )}
+                <Button
+                  color="inherit"
+                  component={Link}
+                  to="/tiffin"
+                  sx={styles.button}
+                >
+                  Tiffins
+                </Button>
+                <Button
+                  color="inherit"
+                  component={Link}
+                  to="/order"
+                  sx={styles.button}
+                >
+                  Orders
+                </Button>
+                <Button
+                  color="inherit"
+                  component={Link}
+                  to="/addTiffin"
+                  sx={styles.button}
+                >
+                  Add Tiffins
+                </Button>
               </>
             )}
           </Box>
@@ -167,7 +160,7 @@ const Navbar = () => {
             )}
             {location !== "/login" && (
               <>
-                {token && userRoleId === RETAILER_ROLE_ID && (
+                {token && (
                   <IconButton
                     color="inherit"
                     component={Link}

@@ -3,14 +3,36 @@ import { ApiResponse, OrderValue } from "./Retailer.types";
 
 const API_URL = process.env.REACT_APP_API_URL!;
 
+// export const getAllOrders = async (
+//   page?: number,
+//   limit?: number
+// ): Promise<{ data: OrderValue[]; totalPages: number; totalItems: number }> => {
+//   try {
+//     const response = await axiosInstance.get<
+//       ApiResponse & { pagination: { totalPages: number; totalItems: number } }
+//     >(`${API_URL}/retailers/getallorders?page=${page}&limit=${limit}`);
+//     return {
+//       data: response.data.data,
+//       totalPages: response.data.pagination.totalPages,
+//       totalItems: response.data.pagination.totalItems,
+//     };
+//   } catch (error) {
+//     throw error;
+//   }
+// };
 export const getAllOrders = async (
   page?: number,
-  limit?: number
+  limit?: number,
+  status?: string
 ): Promise<{ data: OrderValue[]; totalPages: number; totalItems: number }> => {
   try {
+    const url =
+      page && limit && status
+        ? `${API_URL}/retailers/getallorders?page=${page}&limit=${limit}&status=${status}`
+        : `${API_URL}/retailers/getallorders?page=${page}&limit=${limit}`;
     const response = await axiosInstance.get<
       ApiResponse & { pagination: { totalPages: number; totalItems: number } }
-    >(`${API_URL}/retailers/getallorders?page=${page}&limit=${limit}`);
+    >(url);
     return {
       data: response.data.data,
       totalPages: response.data.pagination.totalPages,
@@ -20,17 +42,6 @@ export const getAllOrders = async (
     throw error;
   }
 };
-// export const getAllOrders = async (page?:number,limit?:number): Promise<OrderValue[]> => {
-//   try {
-//     const response = await axiosInstance.get<ApiResponse>(
-//       `${API_URL}/retailers/getallorders?page=${page}&limit=${limit}`
-//     );
-//     return response.data.data;
-//   } catch (error) {
-//     throw error;
-//   }
-// };
-
 export const confirmOrders = async (orderid: string): Promise<OrderValue[]> => {
   try {
     const response = await axiosInstance.get<ApiResponse>(

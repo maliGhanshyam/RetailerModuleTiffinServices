@@ -38,7 +38,7 @@ export default function TiffinTable() {
   const [actionType, setActionType] = useState<"approve" | "reject" | null>(null);
   const [selectedTiffin, setSelectedTiffin] = useState<Tiffin | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [rowsPerPage, setRowsPerPage] = useState(2);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const limit = rowsPerPage; // Set limit to 2 items per page
   const { showSnackbar } = useSnackbar();
@@ -186,7 +186,7 @@ export default function TiffinTable() {
           }}
         />
       </Box>
-      <TableContainer sx={{ maxHeight: 440 ,marginRight: "20px"}}>
+      <TableContainer sx={{ maxHeight: 800 ,marginRight: "20px"}}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead sx={styles.background}>
             <TableRow>
@@ -216,7 +216,7 @@ export default function TiffinTable() {
       </TableContainer>
 
       <TablePagination
-        rowsPerPageOptions={[2, 5, 10]}
+        rowsPerPageOptions={[5, 10]}
         component="div"
         count={totalItems}
         rowsPerPage={rowsPerPage}

@@ -58,8 +58,8 @@ const ProfileUpdate = () => {
       formik.setFieldValue("contact_number", userData.contact_number || "");
       formik.setFieldValue("address", userData.address || "");
       formik.setFieldValue("user_image", userData.user_image || "");
-      formik.setFieldValue("organization_id", userData.role_specific_details?.approval.organization_id || "");
-      formik.setFieldValue("approval_status", userData.role_specific_details?.approval.approval_status || "");
+      formik.setFieldValue("organization_id", userData.role_specific_details?.approval?.organization_id || "");
+      formik.setFieldValue("approval_status", userData.role_specific_details?.approval?.approval_status || "");
     }
   }, [userData]);
 

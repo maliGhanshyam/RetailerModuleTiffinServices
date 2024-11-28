@@ -13,6 +13,9 @@ export const styles: { [key: string]: SxProps<Theme> } = {
   tableCellStyleNormal: {
     display: { xs: "none", sm: "table-cell" },
   },
+  tableCellStyleNone: {
+    display: { xs: "table-cell", sm: "table-cell" },
+  },
   background: {
     backgroundColor: "#f4f4f4",
   },
@@ -27,6 +30,21 @@ export const styles: { [key: string]: SxProps<Theme> } = {
     boxShadow: 3,
   },
   boxStyle: {
+    display: { sm: "flex", xs: "block" },
+    justifyContent: "flex-end",
+    marginBottom: "4px",
+    marginTop: "8px",
+    marginRight: "8px",
+  },
+  boxStyleButton: {
+    display: { sm: "flex", xs: "flex" },
+    justifyContent: "flex-end",
+    marginBottom: "4px",
+    marginTop: "8px",
+    marginRight:{sm:"8px",xs:"0px"} ,
+    marginLeft:{xs:1,sm:0}
+  },
+  boxStyleSearch: {
     display: { sm: "flex", xs: "block" },
     justifyContent: "flex-end",
     marginBottom: "4px",
@@ -73,3 +91,25 @@ export const getStatusBadgeStyle = (status: string): SxProps<Theme> => {
   };
 };
 
+export const buttonStyles = {
+  baseButton: {
+    border: "primary.main",
+    borderRadius: "12px",
+    marginRight: 1,
+    fontWeight: "bold",
+    "&:hover": {
+      backgroundColor: "#ecf0f1",
+    },
+  },
+  activeButton: {
+    backgroundColor: "primary.main",
+    color: "#fff",
+    "&:hover": {
+      backgroundColor: "primary.dark",
+    },
+  },
+  defaultButton: {
+    backgroundColor: "transparent",
+    color: "primary.main",
+  },
+};
