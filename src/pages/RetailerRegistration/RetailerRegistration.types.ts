@@ -9,7 +9,7 @@ export interface Organization {
     severity: "success" | "error";
   }
   export interface RegisterResponse {
-    statuscode: number;
+    statusCode: number;
     message: string;
   }
   
