@@ -3,7 +3,7 @@ import { Theme } from "@mui/material/styles";
 
 export const styles: { [key: string]: SxProps<Theme> } = {
   tableRowStyle: {
-    "& > *": { borderBottom: "unset" },
+    // "& > *": { borderBottom: "unset" },
     "&:hover": { backgroundColor: "#f1f1f1" },
   },
   tableCellStyleFont: {

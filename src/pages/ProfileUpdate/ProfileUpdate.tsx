@@ -222,7 +222,7 @@ const ProfileUpdate = () => {
                     onClick={handleImageUpload}
                     size="small"
                     variant="contained"
-                    color="info"
+                    color="primary"
                     sx={{ paddingX: "28px" }}
                   >
                     Upload
