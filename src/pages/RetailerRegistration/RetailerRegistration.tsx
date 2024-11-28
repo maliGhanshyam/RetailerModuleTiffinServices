@@ -35,7 +35,7 @@ const RetailerRegistration = () => {
       address: "",
       password: "",
       confirmPassword: "",
-      gst_no:"",
+      gst_no: "",
       role_id: RETAILER_ROLE_ID,
     },
     validationSchema: Yup.object({
@@ -71,9 +71,12 @@ const RetailerRegistration = () => {
       confirmPassword: Yup.string()
         .oneOf([Yup.ref("password")], "Passwords must match")
         .required("Confirm Password is required"),
-        gst_no:Yup.string().matches(
-        /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[0-9]{1}[A-Z]{1}[0-9]{1}$/,"Must matches GST format 22AAAAA0000A1Z5" )
-    .required("GST no is required")
+      gst_no: Yup.string()
+        .matches(
+          /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[0-9]{1}[A-Z]{1}[0-9]{1}$/,
+          "Must matches GST format 22AAAAA0000A1Z5"
+        )
+        .required("GST no is required"),
     }),
     onSubmit: async (values, actions) => {
       try {
@@ -90,226 +93,216 @@ const RetailerRegistration = () => {
   });
 
   return (
-    <Container component="main">
-      <Grid2 container size={12}>
-        <Grid2 size={7} sx={styles.svgGrid}>
-          <Box sx={styles.svgBox}>
-            <img
-              src={login}
-              alt="Registration logo"
-              style={{
-                width: 600,
-                height: 600,
-                objectFit: "contain",
-              }}
-            />
-          </Box>
-        </Grid2>
-        <Grid2 size={{ xs: 12, sm: 4 }}>
-          <Box sx={styles.container}>
-            <Typography
-              component="h1"
-              variant="h5"
-              align="center"
-              sx={styles.heading}
-            >
-              Retailer Registration
-            </Typography>
-            <Box
-              component="form"
-              onSubmit={formik.handleSubmit}
-              noValidate
-              sx={{ mt: 2 }}
-            >
-              <Grid2 container spacing={2}>
-                <Grid2 size={12}>
-                  <TextField
-                    fullWidth
-                    label="Username"
-                    name="username"
-                    id="username"
-                    autoComplete="off"
-                    size="small"
-                    value={formik.values.username}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    error={
-                      formik.touched.username && Boolean(formik.errors.username)
-                    }
-                    helperText={
-                      formik.touched.username && formik.errors.username
-                    }
-                  />
-                </Grid2>
-                <Grid2 size={12}>
-                  <TextField
-                    fullWidth
-                    label="Email"
-                    name="email"
-                    id="email"
-                    autoComplete="off"
-                    size="small"
-                    value={formik.values.email}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    error={formik.touched.email && Boolean(formik.errors.email)}
-                    helperText={formik.touched.email && formik.errors.email}
-                  />
-                </Grid2>
-                <Grid2 size={12}>
-                  <TextField
-                    fullWidth
-                    label="Contact Number"
-                    name="contact_number"
-                    id="contact_number"
-                    autoComplete="off"
-                    size="small"
-                    value={formik.values.contact_number}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    error={
-                      formik.touched.contact_number &&
-                      Boolean(formik.errors.contact_number)
-                    }
-                    helperText={
-                      formik.touched.contact_number &&
-                      formik.errors.contact_number
-                    }
-                  />
-                </Grid2>
-                <Grid2 size={12}>
-                  <TextField
-                    fullWidth
-                    label="GST Number"
-                    name="gst_no"
-                    id="gst_no"
-                    autoComplete="off"
-                    size="small"
-                    value={formik.values.gst_no}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    error={
-                      formik.touched.gst_no &&
-                      Boolean(formik.errors.gst_no)
-                    }
-                    helperText={
-                      formik.touched.gst_no &&
-                      formik.errors.gst_no
-                    }
-                  />
-                </Grid2>
-                <Grid2 size={12}>
-                  <TextField
-                    fullWidth
-                    label="Address"
-                    name="address"
-                    id="address"
-                    autoComplete="off"
-                    size="small"
-                    value={formik.values.address}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    error={
-                      formik.touched.address && Boolean(formik.errors.address)
-                    }
-                    helperText={formik.touched.address && formik.errors.address}
-                  />
-                </Grid2>
-                <Grid2 size={12}>
-                  <TextField
-                    fullWidth
-                    label="Password"
-                    name="password"
-                    type={showPassword ? "text" : "password"}
-                    id="password"
-                    autoComplete="off"
-                    size="small"
-                    value={formik.values.password}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    error={
-                      formik.touched.password && Boolean(formik.errors.password)
-                    }
-                    helperText={
-                      formik.touched.password && formik.errors.password
-                    }
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <IconButton
-                            onClick={() => setShowPassword(!showPassword)}
-                            edge="end"
-                          >
-                            {showPassword ? (
-                              <VisibilityIcon />
-                            ) : (
-                              <VisibilityOffIcon />
-                            )}
-                          </IconButton>
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-                </Grid2>
-                <Grid2 size={12}>
-                  <TextField
-                    fullWidth
-                    label="Confirm Password"
-                    name="confirmPassword"
-                    id="confirmPassword"
-                    type={showConfirmPassword ? "text" : "password"}
-                    autoComplete="off"
-                    size="small"
-                    value={formik.values.confirmPassword}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    error={
-                      formik.touched.confirmPassword &&
-                      Boolean(formik.errors.confirmPassword)
-                    }
-                    helperText={
-                      formik.touched.confirmPassword &&
-                      formik.errors.confirmPassword
-                    }
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <IconButton
-                            onClick={() =>
-                              setShowConfirmPassword(!showConfirmPassword)
-                            }
-                            edge="end"
-                          >
-                            {showConfirmPassword ? (
-                              <VisibilityIcon />
-                            ) : (
-                              <VisibilityOffIcon />
-                            )}
-                          </IconButton>
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-                </Grid2>
-              </Grid2>
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-                sx={styles.button}
-              >
-                Sign Up
-              </Button>
-            </Box>
-            <Typography variant="body2" align="center">
-              Already have an account?&nbsp;
-              <Link to={"/login"}>click here to login</Link>
-            </Typography>
-          </Box>
-        </Grid2>
+    <Grid2 container size={12}>
+      <Grid2 size={7} sx={styles.svgGrid}>
+        <Box sx={styles.svgBox}>
+          <img
+            src={login}
+            alt="Registration logo"
+            style={{
+              width: 600,
+              height: 600,
+              objectFit: "contain",
+            }}
+          />
+        </Box>
       </Grid2>
-    </Container>
+      <Grid2 size={{ xs: 12, sm: 4 }}>
+        <Box sx={styles.container}>
+          <Typography
+            component="h1"
+            variant="h5"
+            align="center"
+            sx={styles.heading}
+          >
+            Retailer Registration
+          </Typography>
+          <Box
+            component="form"
+            onSubmit={formik.handleSubmit}
+            noValidate
+            sx={{ mt: 2 }}
+          >
+            <Grid2 container spacing={2} sx={styles.formGrid}>
+              <Grid2 size={10}>
+                <TextField
+                  fullWidth
+                  label="Username"
+                  name="username"
+                  id="username"
+                  autoComplete="off"
+                  size="small"
+                  value={formik.values.username}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={
+                    formik.touched.username && Boolean(formik.errors.username)
+                  }
+                  helperText={formik.touched.username && formik.errors.username}
+                />
+              </Grid2>
+              <Grid2 size={10}>
+                <TextField
+                  fullWidth
+                  label="Email"
+                  name="email"
+                  id="email"
+                  autoComplete="off"
+                  size="small"
+                  value={formik.values.email}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={formik.touched.email && Boolean(formik.errors.email)}
+                  helperText={formik.touched.email && formik.errors.email}
+                />
+              </Grid2>
+              <Grid2 size={10}>
+                <TextField
+                  fullWidth
+                  label="Contact Number"
+                  name="contact_number"
+                  id="contact_number"
+                  autoComplete="off"
+                  size="small"
+                  value={formik.values.contact_number}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={
+                    formik.touched.contact_number &&
+                    Boolean(formik.errors.contact_number)
+                  }
+                  helperText={
+                    formik.touched.contact_number &&
+                    formik.errors.contact_number
+                  }
+                />
+              </Grid2>
+              <Grid2 size={10}>
+                <TextField
+                  fullWidth
+                  label="GST Number"
+                  name="gst_no"
+                  id="gst_no"
+                  autoComplete="off"
+                  size="small"
+                  value={formik.values.gst_no}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={formik.touched.gst_no && Boolean(formik.errors.gst_no)}
+                  helperText={formik.touched.gst_no && formik.errors.gst_no}
+                />
+              </Grid2>
+              <Grid2 size={10}>
+                <TextField
+                  fullWidth
+                  label="Address"
+                  name="address"
+                  id="address"
+                  autoComplete="off"
+                  size="small"
+                  value={formik.values.address}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={
+                    formik.touched.address && Boolean(formik.errors.address)
+                  }
+                  helperText={formik.touched.address && formik.errors.address}
+                />
+              </Grid2>
+              <Grid2 size={10}>
+                <TextField
+                  fullWidth
+                  label="Password"
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  id="password"
+                  autoComplete="off"
+                  size="small"
+                  value={formik.values.password}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={
+                    formik.touched.password && Boolean(formik.errors.password)
+                  }
+                  helperText={formik.touched.password && formik.errors.password}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={() => setShowPassword(!showPassword)}
+                          edge="end"
+                        >
+                          {showPassword ? (
+                            <VisibilityIcon />
+                          ) : (
+                            <VisibilityOffIcon />
+                          )}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid2>
+              <Grid2 size={10}>
+                <TextField
+                  fullWidth
+                  label="Confirm Password"
+                  name="confirmPassword"
+                  id="confirmPassword"
+                  type={showConfirmPassword ? "text" : "password"}
+                  autoComplete="off"
+                  size="small"
+                  value={formik.values.confirmPassword}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={
+                    formik.touched.confirmPassword &&
+                    Boolean(formik.errors.confirmPassword)
+                  }
+                  helperText={
+                    formik.touched.confirmPassword &&
+                    formik.errors.confirmPassword
+                  }
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={() =>
+                            setShowConfirmPassword(!showConfirmPassword)
+                          }
+                          edge="end"
+                        >
+                          {showConfirmPassword ? (
+                            <VisibilityIcon />
+                          ) : (
+                            <VisibilityOffIcon />
+                          )}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid2>
+              <Grid2 size={10}>
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  sx={styles.button}
+                >
+                  Sign Up
+                </Button>
+              </Grid2>
+            </Grid2>
+          </Box>
+          <Typography variant="body2" align="center">
+            Already have an account?&nbsp;
+            <Link to={"/login"}>click here to login</Link>
+          </Typography>
+        </Box>
+      </Grid2>
+    </Grid2>
   );
 };
 

@@ -4,15 +4,16 @@ import { Theme } from "@mui/material/styles";
 export const styles: { [key: string]: SxProps<Theme> } = {
   container: {
     marginTop: 3,
-    marginBottom: 3,
+    marginBottom: 2,
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    padding: 3,
+    padding: "32px 0px",
     backgroundColor: "#ecf0f1",
-    borderRadius: 2,  
+    borderRadius: "25px",
     boxShadow: 2,
-    marginLeft: { sm: 2 },
+    marginLeft: { sm: 2, xs: 2 },
+    marginRight: { sm: 2, xs: 2 },
   },
   svgGrid: {
     display: { xs: "none", sm: "block" },
@@ -23,7 +24,6 @@ export const styles: { [key: string]: SxProps<Theme> } = {
     fontSize: { xs: "1.4rem", sm: "1.5rem" },
   },
   button: {
-    mt: 3,
     mb: 2,
   },
   errorText: {
@@ -38,9 +38,19 @@ export const styles: { [key: string]: SxProps<Theme> } = {
   organizationError: {
     color: "#d32f2f",
   },
-  svgBox:{
-     display: { xs: "none", sm: "block" } 
+  svgBox: {
+    display: { xs: "none", sm: "flex" },
+    justifyContent: "center",
+    alignItems: "center",
   },
+  outerContainer: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  formGrid:{
+    justifyContent:"center"
+  }
 };
 
 export const ITEM_HEIGHT = 48;
