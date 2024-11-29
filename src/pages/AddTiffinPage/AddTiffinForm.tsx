@@ -109,7 +109,7 @@ export default function AddTiffinForm() {
   };
   return (
     <Container>
-      <Box sx={{ marginTop: 4, padding: 3, boxShadow: 2, borderRadius: 2 }}>
+      <Box sx={{ marginTop: 4, padding: 3, boxShadow: 2, borderRadius: 2,backgroundColor: "#fff" }}>
         <Typography variant="h5" sx={{ marginBottom: 2 }}>
           Add Tiffin Item
         </Typography>

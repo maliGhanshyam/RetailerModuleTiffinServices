@@ -9,7 +9,6 @@ import {
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { styles } from "./ProfileUpdate.styles";
-import { RETAILER_ROLE_ID } from "../../constants/ROLES";
 import {
   getUserByToken,
   updateProfile,
@@ -26,10 +25,10 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../store/Store";
 
 const ProfileUpdate = () => {
-  const [selectedOrganization, setSelectedOrganization] = useState<string>("");
   const [userData, setUserData] = useState<User>();
   const [image, setImage] = useState<File | null>(null);
   const [image1, setImage1] = useState<string>("");
+  const [imagePreview, setImagePreview] = useState<string>(""); //image preview
   const userId = useSelector((state: RootState) => state.auth.userId);
   const { showSnackbar } = useSnackbar();
 
@@ -49,17 +48,15 @@ const ProfileUpdate = () => {
     }
   };
 
-  // Set selectedOrganization from userData if available
   useEffect(() => {
     if (userData) {
+      setImagePreview(userData.user_image || "");
       setImage1(userData.user_image || "");
       formik.setFieldValue("username", userData.username || "");
       formik.setFieldValue("email", userData.email || "");
       formik.setFieldValue("contact_number", userData.contact_number || "");
       formik.setFieldValue("address", userData.address || "");
       formik.setFieldValue("user_image", userData.user_image || "");
-      formik.setFieldValue("organization_id", userData.role_specific_details?.approval?.organization_id || "");
-      formik.setFieldValue("approval_status", userData.role_specific_details?.approval?.approval_status || "");
     }
   }, [userData]);
 
@@ -71,10 +68,6 @@ const ProfileUpdate = () => {
       email: userData?.email || "",
       contact_number: userData?.contact_number || "",
       address: userData?.address || "",
-      approval_status:userData?.role_specific_details?.approval?.approval_status||"",
-      organization_id:userData?.role_specific_details?.approval?.organization_id||"",
-      role_id: userData?.role_id || RETAILER_ROLE_ID,
-      gst_no: userData?.role_specific_details?.gst_no || "",
     },
     validationSchema: Yup.object({
       username: Yup.string()
@@ -98,13 +91,10 @@ const ProfileUpdate = () => {
         .required("Address is required")
         .min(5, "At least 5 characters be there")
         .max(50, "Upto 50 characters long"),
-      gst_no: Yup.string()
-        // .matches(/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[0-9]{1}[A-Z]{1}[0-9]{1}$/)
-        .required("GST no is required"),
     }),
     onSubmit: async (values, actions) => {
       try {
-        const res: ProfileResponse = await updateProfile(userId!, values);
+        const res: ProfileResponse = await updateProfile(userId!,values);
         if (res.statusCode === 200) {
           showSnackbar("Profile updated successfully.", "success");
         }
@@ -126,7 +116,8 @@ const ProfileUpdate = () => {
     }
     try {
       const res = await uploadUserImage(image!);
-      setImage1(res.image);
+      setImagePreview(res.image); // Update image preview after upload
+      // setImage1(res.image);
       setUserData((prevUserData: any) => ({
         ...prevUserData,
         user_image: res.image, // Update userData directly instead of fetchUserData
@@ -317,28 +308,6 @@ const ProfileUpdate = () => {
                   }
                 />
               </Grid2>
-              <Grid2 size={10}>
-                  <TextField
-                    fullWidth
-                    label="GST Number"
-                    name="gst_no"
-                    id="gst_no"
-                    autoComplete="off"
-                    size="small"
-                    value={formik.values.gst_no}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    disabled={true}
-                    error={
-                      formik.touched.gst_no &&
-                      Boolean(formik.errors.gst_no)
-                    }
-                    helperText={
-                      formik.touched.gst_no &&
-                      formik.errors.gst_no
-                    }
-                  />
-                </Grid2>
               <Grid2 size={10}>
                 <Button
                   type="submit"

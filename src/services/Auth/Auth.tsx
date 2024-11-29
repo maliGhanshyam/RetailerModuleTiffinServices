@@ -75,39 +75,24 @@ export const getUserByToken = async (): Promise<UserResponse> => {
   }
 };
 export const updateProfile = async (
-  userid: string,
+  userId:string,
   {
     user_image,
     username,
     email,
     contact_number,
     address,
-    gst_no,
-    approval_status,
-    role_id,
-    organization_id
   }: Profile
 ): Promise<ProfileResponse> => {
   try {
-    const approval = [{
-      approval_status:approval_status,
-      organization_id: organization_id,
-    }]
-    const role_specific_details = {
-      gst_no:gst_no,
-      approval:approval
-    };
-
     const response = await axiosInstance.put(
-      `${API_URL}/auth/updateprofile/${userid}`,
+      `${API_URL}/auth/updateprofile/${userId}`,
       {
         user_image,
         username,
         email,
         contact_number,
         address,
-        role_specific_details,
-        role_id,
       }
     );
 

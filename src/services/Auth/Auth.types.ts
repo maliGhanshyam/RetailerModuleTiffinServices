@@ -13,9 +13,18 @@ export interface RegisterResponse {
   message: string;
   token?: string;
 }
+// export interface Approval {
+//   approval_status: string;
+//   organization_id: string;
+//   org_loc:string;
+//   }
 export interface Approval {
+  Item:Item[];
+}
+export interface Item {
   approval_status: string;
   organization_id: string;
+  org_loc:string;
   }
 export interface User {
   user_image: string;
@@ -44,11 +53,7 @@ export interface Profile {
   username: string;
   email: string;
   contact_number: string;
-  organization_id:string;
-  address: string;
-  gst_no: string;
-  role_id: string;
-  approval_status: string;
+  address:string;
 }
 export interface ProfileResponse {
   statusCode: number;
