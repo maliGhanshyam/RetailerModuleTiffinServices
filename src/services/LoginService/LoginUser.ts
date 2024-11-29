@@ -1,20 +1,15 @@
 import axios from "axios";
-const API_URL = "http://localhost:5000";
-export const LoginUser = async (email: string, password: string) => {
+import axiosInstance from "../TiffinService/axiosInstance";
+export const loginUser = async (email: string, password: string) => {
   try {
-    const response = await axios.post(
-      `${API_URL}/api/auth/login`,
-      { email, password },
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const response = await axiosInstance.post("/auth/login", {
+      email,
+      password,
+    });
 
     const data = response.data;
-    if (data.token) {
-      localStorage.setItem("token", data.token);
+    if (data.token && data.refreshToken) {
+      setTokens(data.token, data.refreshToken);
     }
 
     return data;
@@ -26,8 +21,14 @@ export const LoginUser = async (email: string, password: string) => {
 
 export const logoutUser = () => {
   localStorage.removeItem("token");
+  localStorage.removeItem("refreshToken");
 };
 
-export const getToken = (): boolean => {
-  return !!localStorage.getItem("token");
+export const getToken = (): string | null => localStorage.getItem("token");
+export const getRefreshToken = (): string | null =>
+  localStorage.getItem("refreshToken");
+
+export const setTokens = (token: string, refreshToken: string) => {
+  localStorage.setItem("token", token);
+  localStorage.setItem("refreshToken", refreshToken);
 };
