@@ -1,11 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  Box,
-  Button,
-  Grid2,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Grid2, TextField, Typography } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { styles } from "./ProfileUpdate.styles";
@@ -25,10 +19,9 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../store/Store";
 
 const ProfileUpdate = () => {
-  const [userData, setUserData] = useState<User>();
+  const [userData, setUserData] = useState<User | null>(null);
   const [image, setImage] = useState<File | null>(null);
-  const [image1, setImage1] = useState<string>("");
-  const [imagePreview, setImagePreview] = useState<string>(""); //image preview
+  const [imagePreview, setImagePreview] = useState<string>(""); // image preview
   const userId = useSelector((state: RootState) => state.auth.userId);
   const { showSnackbar } = useSnackbar();
 
@@ -48,22 +41,21 @@ const ProfileUpdate = () => {
     }
   };
 
+  // Update form values and image preview when userData is available
   useEffect(() => {
     if (userData) {
       setImagePreview(userData.user_image || "");
-      setImage1(userData.user_image || "");
       formik.setFieldValue("username", userData.username || "");
       formik.setFieldValue("email", userData.email || "");
       formik.setFieldValue("contact_number", userData.contact_number || "");
       formik.setFieldValue("address", userData.address || "");
-      formik.setFieldValue("user_image", userData.user_image || "");
     }
   }, [userData]);
 
   const formik = useFormik({
     enableReinitialize: true, // Reinitialize Formik when userData changes
     initialValues: {
-      user_image: image1 || "",
+      user_image: imagePreview || "",
       username: userData?.username || "",
       email: userData?.email || "",
       contact_number: userData?.contact_number || "",
@@ -71,10 +63,7 @@ const ProfileUpdate = () => {
     },
     validationSchema: Yup.object({
       username: Yup.string()
-        .matches(
-          /^[a-zA-Z0-9.\-_$@*!]{3,20}$/,
-          "Must be a valid username number"
-        )
+        .matches(/^[a-zA-Z0-9.\-_$@*!]{3,20}$/, "Must be a valid username")
         .required("Username is required"),
       email: Yup.string()
         .email("Invalid email address")
@@ -89,12 +78,12 @@ const ProfileUpdate = () => {
         .required("Contact Number is required"),
       address: Yup.string()
         .required("Address is required")
-        .min(5, "At least 5 characters be there")
-        .max(50, "Upto 50 characters long"),
+        .min(5, "At least 5 characters required")
+        .max(50, "Up to 50 characters allowed"),
     }),
     onSubmit: async (values, actions) => {
       try {
-        const res: ProfileResponse = await updateProfile(userId!,values);
+        const res: ProfileResponse = await updateProfile(userId!, values);
         if (res.statusCode === 200) {
           showSnackbar("Profile updated successfully.", "success");
         }
@@ -103,30 +92,35 @@ const ProfileUpdate = () => {
       }
     },
   });
+
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]; // first file selected
     if (file) {
       setImage(file);
+      //preview of the selected image
+      const previewUrl = URL.createObjectURL(file);
+      setImagePreview(previewUrl); // Update preview state with the new image
     }
   };
+
   const handleImageUpload = async () => {
     if (!image) {
       showSnackbar("Please select an image first", "error");
       return;
     }
     try {
-      const res = await uploadUserImage(image!);
+      const res = await uploadUserImage(image);
       setImagePreview(res.image); // Update image preview after upload
-      // setImage1(res.image);
       setUserData((prevUserData: any) => ({
         ...prevUserData,
-        user_image: res.image, // Update userData directly instead of fetchUserData
+        user_image: res.image, // Update userData directly
       }));
       showSnackbar("Image uploaded successfully!", "success");
     } catch (error) {
       showSnackbar("Failed to upload image.", "error");
     }
   };
+
   return (
     <Grid2 container size={12}>
       <Grid2 size={7} sx={styles.svgGrid}>
@@ -179,36 +173,20 @@ const ProfileUpdate = () => {
                     style={{ display: "none" }}
                     id="profile-image-upload"
                   />
-                  {userData ? (
-                    <img
-                      src={
-                        userData.user_image || "https://via.placeholder.com/150"
-                      }
-                      alt="profile"
-                      onClick={() =>
-                        document.getElementById("profile-image-upload")?.click()
-                      }
-                      style={{
-                        width: 100,
-                        height: 100,
-                        borderRadius: "50%",
-                        objectFit: "cover",
-                        cursor: "pointer",
-                      }}
-                    />
-                  ) : (
-                    <img
-                      src="https://via.placeholder.com/150"
-                      alt="placeholder"
-                      style={{
-                        width: 100,
-                        height: 100,
-                        borderRadius: "50%",
-                        objectFit: "cover",
-                      }}
-                    />
-                  )}
-
+                  <img
+                    src={imagePreview || "https://via.placeholder.com/150"}
+                    alt="profile"
+                    onClick={() =>
+                      document.getElementById("profile-image-upload")?.click()
+                    }
+                    style={{
+                      width: 100,
+                      height: 100,
+                      borderRadius: "50%",
+                      objectFit: "cover",
+                      cursor: "pointer",
+                    }}
+                  />
                   <Button
                     onClick={handleImageUpload}
                     size="small"
@@ -235,12 +213,7 @@ const ProfileUpdate = () => {
                   error={
                     formik.touched.username && Boolean(formik.errors.username)
                   }
-                  helperText={
-                    formik.touched.username &&
-                    typeof formik.errors.username === "string"
-                      ? formik.errors.username
-                      : null
-                  }
+                  helperText={formik.touched.username && formik.errors.username}
                 />
               </Grid2>
               <Grid2 size={10}>
@@ -255,12 +228,7 @@ const ProfileUpdate = () => {
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   error={formik.touched.email && Boolean(formik.errors.email)}
-                  helperText={
-                    formik.touched.email &&
-                    typeof formik.errors.email === "string"
-                      ? formik.errors.email
-                      : null
-                  }
+                  helperText={formik.touched.email && formik.errors.email}
                 />
               </Grid2>
               <Grid2 size={10}>
@@ -280,9 +248,7 @@ const ProfileUpdate = () => {
                   }
                   helperText={
                     formik.touched.contact_number &&
-                    typeof formik.errors.contact_number === "string"
-                      ? formik.errors.contact_number
-                      : null
+                    formik.errors.contact_number
                   }
                 />
               </Grid2>
@@ -300,12 +266,7 @@ const ProfileUpdate = () => {
                   error={
                     formik.touched.address && Boolean(formik.errors.address)
                   }
-                  helperText={
-                    formik.touched.address &&
-                    typeof formik.errors.address === "string"
-                      ? formik.errors.address
-                      : null
-                  }
+                  helperText={formik.touched.address && formik.errors.address}
                 />
               </Grid2>
               <Grid2 size={10}>
