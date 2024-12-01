@@ -1,6 +1,8 @@
 import React from 'react';
 import { Navigate } from "react-router-dom";
 import PageNotFound from "../components/NotFound/PageNotFound";
+import { RetailerDashboard } from "../pages/dashboard";
+import { UserLandingPage } from "../pages/landingPage";
 import AddTiffinForm from "../pages/AddTiffinPage/AddTiffinForm";
 import { RetailerRegistration } from "../pages/RetailerRegistration";
 import { Order } from "../pages/Order";
@@ -26,6 +28,14 @@ const childRoutes = [
   {
     path: "*",
     element: <PageNotFound />,
+  },
+  {
+    path: "",
+    element: <LoginForm />,
+  },
+  {
+    path: "/dashboard",
+    element: <RetailerDashboard />,
   },
   {
     path: "register",

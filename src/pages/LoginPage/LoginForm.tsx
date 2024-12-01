@@ -61,7 +61,7 @@ const LoginForm = () => {
           })
         );
         showSnackbar("Login successful", "success");
-        navigate(response.role_id === RETAILER_ROLE_ID ? "/landingPage" : "*");
+        navigate(response.role_id === RETAILER_ROLE_ID ? "/dashboard" : "*");
       } else {
         showSnackbar("Invalid credentials", "error");
       }
