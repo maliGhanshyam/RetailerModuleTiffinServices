@@ -46,6 +46,7 @@ export const styles: { [key: string]: SxProps<Theme> } = {
   iconButtonRejectStyle: {
     "&:hover": { backgroundColor: "#f8d7da" },
   },
+  arraowIconSize:{ fontSize: "16px", marginLeft: "4px" }
 };
 
 export const getStatusBadgeStyle = (status: string): SxProps<Theme> => {
