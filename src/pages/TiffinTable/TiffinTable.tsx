@@ -74,18 +74,12 @@ export default function TiffinTable() {
   };
   const searchTiffin = async (
     query: string = "",
-    page: number = 0,
-    limit: number = 2
   ) => {
     try {
-      const { data, totalItems, totalPages } = await searchTiffins(
-        query,
-        page + 1,
-        limit
+      const data = await searchTiffins(
+        query
       );
       setTiffins(data || []);
-      setTotalItems(totalItems);
-      setTotalPages(totalPages);
     } catch (error) {
       showSnackbar("Search error", "error");
       setTiffins([]);
@@ -95,7 +89,7 @@ export default function TiffinTable() {
   useEffect(() => {
     const timer = setTimeout(() => {
       if (searchTerm) {
-        searchTiffin(searchTerm, page, limit);
+        searchTiffin(searchTerm);
       } else {
         fetchTiffins(page, limit);
       }

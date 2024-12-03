@@ -44,17 +44,15 @@ export const cancelTiffins = async (tiffinid: string): Promise<Tiffin[]> => {
 
 export const searchTiffins = async (
   query: string,
-  page: number,
-  limit: number
 ) => {
   try {
     const response = await axiosInstance.get(
       `${API_URL}/retailers/tiffinItems/searchTiffinItem`,
       {
-        params: { query, page, limit },
+        params: { query },
       }
     );
-    return response.data;
+    return response.data.data;
   } catch (error) {
     throw error;
   }

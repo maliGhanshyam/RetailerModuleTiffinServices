@@ -78,18 +78,12 @@ export default function Order() {
   // Search orders
   const searchOrder = async (
     query: string = "",
-    page: number = 0,
-    limit: number = 2
   ) => {
     try {
-      const { data, totalItems, totalPages } = await searchOrders(
+      const data = await searchOrders(
         query,
-        page + 1,
-        limit
       );
       setOrders(data || []);
-      setTotalItems(totalItems);
-      setTotalPages(totalPages);
     } catch (error) {
       showSnackbar("Search error", "error");
       setOrders([]);
@@ -99,7 +93,7 @@ export default function Order() {
   useEffect(() => {
     const timer = setTimeout(() => {
       if (searchTerm) {
-        searchOrder(searchTerm, page, limit);
+        searchOrder(searchTerm);
       } else {
         fetchOrders(page, limit, statusFilter);
       }
