@@ -3,3 +3,8 @@ export interface MonthlyOrderData {
   totalOrders: number;
   totalAmount: number;
 }
+
+export interface OrderCountData {
+  count: number;
+  delivery_status: string;
+}

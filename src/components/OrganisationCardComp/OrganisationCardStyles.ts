@@ -1,10 +1,8 @@
-// OrganisationCardStyles.ts
-
 import { SxProps, Theme } from "@mui/material";
 
 const OrganisationCardStyles = {
   cardStyles: {
-    maxWidth: 350,
+    maxWidth: 300,
     height: 400,
     backgroundColor: "#f9f9f9",
     borderRadius: 5,
@@ -30,6 +28,7 @@ const OrganisationCardStyles = {
   },
   statusStyles: (status: string): SxProps<Theme> => ({
     mt: 1,
+    textAlign: "left",
     color:
       status.toLowerCase() === "active"
         ? "success.main"

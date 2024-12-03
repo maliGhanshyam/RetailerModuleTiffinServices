@@ -14,3 +14,5 @@ export type { Cart } from "./Tiffins/Cart";
 export type { CartItem } from "./Tiffins/Cart";
 export type {Tiffin} from "./Tiffins/Tiffin";
 export type { MonthlyOrderData } from "./Order/OrderSummary";
+export type { OrderCountApiResponse } from "./ApiResponse/ApiResponse";
+export type { OrderCountData } from "./Order/OrderSummary";

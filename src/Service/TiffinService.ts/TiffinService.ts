@@ -2,11 +2,12 @@ import axios from "axios";
 import {
   Order,
   OrderApiResponse,
+  OrderCountData,
   Pagination,
 } from "../../Types";
 // import { Organization, UserData } from "../../Types";
 import axiosInstance from "../Interceptor/axiosInstance";
-import { TiffinApiResponse } from "../../Types/ApiResponse/ApiResponse";
+import { OrderCountApiResponse, TiffinApiResponse } from "../../Types/ApiResponse/ApiResponse";
 
 
 const API_URL = process.env.REACT_APP_API_URL;
@@ -49,40 +50,22 @@ export const getAllOrders = async (): Promise<OrderApiResponse> => {
 
 
 //TODO:
-export const getOrderRequests = async (
-  status: string
-): Promise<{ data: Order[]; pagination: Pagination }> => {
+export const getOrderRequests = async (): Promise<OrderCountData[]> => {
   try {
-    const url = `/retailers/getallorders?status=${status}`;
+    const url = `/retailers/getOrderCount`;
     console.log(`Request URL: ${url}`);
 
-    const response = await axiosInstance.get<OrderApiResponse>(url);
-    console.log(`${status} Orders fetched successfully`, response.data);
+    const response = await axiosInstance.get<{ data: OrderCountData[] }>(url);
+    console.log(`Orders fetched successfully`, response.data);
 
-    // Return data and pagination
-    return {
-      data: response.data.data,
-      pagination: response.data.pagination,
-    };
+    // Return the data array directly
+    return response.data.data;
   } catch (error) {
-    // Narrow down the error type to handle it safely
-    if (axios.isAxiosError(error)) {
-      if (error.response && error.response.status === 500) {
-        console.warn(`No ${status} orders found. Returning default values.`);
-        return {
-          data: [],
-          pagination: { totalItems: 0, currentPage: 1, totalPages: 1 },
-        };
-      }
-      console.error(`Axios error fetching ${status} orders:`, error.message);
-    } else {
-      console.error(`Unexpected error fetching ${status} orders:`, error);
-    }
-
-    // Re-throw the error for unhandled scenarios
-    throw error;
+    console.error(`Error fetching orders:`, error);
+    throw error; // Re-throw the error for the caller to handle
   }
 };
+
 
 
 //Get all Tiffins

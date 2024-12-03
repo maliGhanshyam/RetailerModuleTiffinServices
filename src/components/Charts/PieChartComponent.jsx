@@ -140,7 +140,7 @@ export default function PieChartComponent({ chartData }) {
                   },
                 }}
               >
-                <MonthlyAreaChart />
+                <MonthlyAreaChart year={2024 }></MonthlyAreaChart>
               </Box>
             </Paper>
           </Box>

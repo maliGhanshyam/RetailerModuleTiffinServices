@@ -1,57 +1,67 @@
-import React, { useEffect, useState } from 'react'
-import PieChartComponent from '../../components/Charts/PieChartComponent';
-import Page from '../../components/PageComponent/Page';
-import { Box, Button, Container, Grid, Typography } from '@mui/material';
-import Slider from 'react-slick';
-import VisibilityIcon from "@mui/icons-material/Visibility";
+import React, { useEffect, useState } from "react";
+import PieChartComponent from "../../components/Charts/PieChartComponent";
+import Page from "../../components/PageComponent/Page";
+import { Box, Container, Grid, Typography } from "@mui/material";
+import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import {Organization} from "../../Types/Organization/Organization"
-import { getOrganizations } from '../../Service/OrganisationService/OrganizationService';
-import OrganisationCard from '../../components/OrganisationCardComp/OrganisationCard';
-import { getAllOrders, getAllTiffins, getOrderRequests } from "../../Service/TiffinService.ts/TiffinService";
-import { Order } from '../../Types';
-import { getMonthlyOrders } from '../../Service/OrderService/OrderService';
+import { Organization } from "../../Types/Organization/Organization";
+import { getOrganizations } from "../../Service/OrganisationService/OrganizationService";
+import OrganisationCard from "../../components/OrganisationCardComp/OrganisationCard";
+import {
+  getAllOrders,
+  getAllTiffins,
+  getOrderRequests,
+} from "../../Service/TiffinService.ts/TiffinService";
+import { getMonthlyOrders } from "../../Service/OrderService/OrderService";
+import { OrderCountData } from "../../Types/Order/OrderSummary";
+
 const RetailerDashboard = () => {
   const [organizations, setOrganizations] = useState<Organization[]>([]);
   const [totalOrders, setTotalOrders] = useState(0);
   const [totalTiffins, setTotalTiffins] = useState(0);
-    const [pendingOrders, setPendingOrders] = useState(0);
-    const [approvedOrders, setApprovedOrders] = useState(0);
+  const [totalRevenue, setTotalRevenue] = useState(0);
+  const [pendingOrders, setPendingOrders] = useState(0);
+  const [approvedOrders, setApprovedOrders] = useState(0);
   const [rejectedOrders, setRejectedOrders] = useState(0);
-  
-  
+
 const getOrderData = async () => {
   try {
-    const statuses = ["pending", "delivered", "rejected"];
-    const results = await Promise.all(
-      statuses.map(async (status) => {
-        const { data, pagination } = await getOrderRequests(status);
-        console.log(`Fetched ${status} Orders:`, data);
-        return { status, data, count: pagination.totalItems };
-      })
-    );
+    const statuses = ["pending", "delivered", "cancelled"];
 
+    const allOrderData: OrderCountData[] = await getOrderRequests();
+    console.log("Fetched All Orders:", allOrderData);
+
+    // Filter and count orders by status
+    const results = statuses.map((status) => {
+      const orderData = allOrderData.find(
+        (item: OrderCountData) => item.delivery_status === status
+      ) || { count: 0 }; // Default to 0 if status is not found
+      return { status, count: orderData.count };
+    });
+
+    // Update state based on the filtered results
     results.forEach(({ status, count }) => {
       if (status === "pending") setPendingOrders(count);
       if (status === "delivered") setApprovedOrders(count);
-      if (status === "rejected") setRejectedOrders(count);
+      if (status === "cancelled") setRejectedOrders(count);
     });
   } catch (error) {
     console.error("Error fetching orders by status:", error);
   }
 };
 
-  
-  const fetchAllOrders = async () => { 
+
+
+  const fetchAllOrders = async () => {
     const response = await getAllOrders();
     setTotalOrders(response.pagination.totalItems);
-  }
-   const fetchAllTiffins = async () => {
-     const response = await getAllTiffins();
-     setTotalTiffins(response.pagination.totalItems);
-   };
+  };
 
+  const fetchAllTiffins = async () => {
+    const response = await getAllTiffins();
+    setTotalTiffins(response.pagination.totalItems);
+  };
 
   // Fetch Organizations
   const fetchOrganizations = async () => {
@@ -63,19 +73,48 @@ const getOrderData = async () => {
       console.error("Error fetching organizations:", error);
     }
   };
+const fetchMonthlyOrders = async () => {
+  let totalRevenue = 0; // Initialize total revenue
+
+  try {
+    const response = await getMonthlyOrders(2024);
+
+    if (response.statusCode === 200 && Array.isArray(response.data)) {
+      // Calculate the total revenue by summing the totalAmount from each month
+      totalRevenue = response.data.reduce(
+        (acc, item) => acc + item.totalAmount,
+        0
+      );
+      setTotalRevenue(totalRevenue);
+      console.log("Total Revenue for the Year:", totalRevenue);
+    } else {
+      console.error("Unexpected response format:", response);
+    }
+  } catch (error) {
+    console.error("Error fetching monthly orders:", error);
+  }
+};
+
+
+  // Refresh organizations after successful request
+  const handleRequestSuccess = () => {
+    fetchOrganizations();
+  };
+
   useEffect(() => {
     fetchOrganizations();
     fetchAllOrders();
     fetchAllTiffins();
     getOrderData();
-    getMonthlyOrders(2024);
-  },[]);
+    fetchMonthlyOrders();
+  }, []);
 
   const papers = [
-    { text: "All Menus", square: false, value:totalTiffins},
-    { text: "Total Orders", square: true, value:totalOrders },
-    { text: "Total Revenue", square: false },
+    { text: "All Menus", square: false, value: totalTiffins },
+    { text: "Total Orders", square: true, value: totalOrders },
+    { text: "Total Revenue", square: false,value: totalRevenue},
   ];
+
   const settings = {
     dots: true,
     infinite: false,
@@ -108,11 +147,12 @@ const getOrderData = async () => {
       },
     ],
   };
+
   return (
     <Container
       sx={{
         "@media (min-width: 1200px)": {
-          maxWidth: "none", // Remove the max-width for large screens
+          maxWidth: "none",
           margin: "12px",
         },
       }}
@@ -130,14 +170,10 @@ const getOrderData = async () => {
           { name: "Approved", value: approvedOrders },
           { name: "Rejected", value: rejectedOrders },
         ]}
-      ></PieChartComponent>
-      {/*TODO:}
-      {/* Main Container */}
+      />
       <Box
         sx={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}
       >
-        {/* <Container sx={{ flexGrow: 1, py: 3 }}> */}
-        {/* Organizations Section */}
         <Box
           sx={{
             display: "flex",
@@ -149,42 +185,29 @@ const getOrderData = async () => {
           <Typography variant="h5" fontWeight="bold" mb={2}>
             Available Organizations
           </Typography>
-    
         </Box>
-        <Slider {...settings}>
-          {organizations.map((org) => (
-            <Box key={org._id} sx={{ minWidth: 450, padding: "0 18px" }}>
-              <OrganisationCard
-                title={org.org_name}
-                description=""
-                image="https://picsum.photos/200/300/?blur"
-                fields={[
-                  ...org.org_location.map((loc) => ({
-                    label: `Location `,
+        <div style={{ height: "800px"}}>
+          <Slider {...settings}>
+            {organizations.map((org) => (
+              <Box key={org._id} sx={{ minWidth: 450, padding: "28px" }}>
+                <OrganisationCard
+                  orgId={org._id} // Pass organization ID
+                  title={org.org_name}
+                  description=""
+                  image={
+                    org.org_image_url || "https://picsum.photos/200/300/?blur"
+                  }
+                  fields={org.org_location.map((loc) => ({
+                    label: `Location`,
                     value: loc.loc,
-                  })),
-                ]}
-                status={org.isActive ? "Active" : "Inactive"}
-                actions={[
-                  {
-                    label: "Register",
-                    color: "primary",
-                    onClick: () => {
-                      console.log("Register");
-                      alert("Register success");
-                    },
-                  },
-                  // {
-                  //   label: "Delete",
-                  //   color: "error",
-                  //   onClick: () => console.log("Delete"),
-                  // },
-                ]}
-              />
-            </Box>
-          ))}
-        </Slider>
-        {/* </Container> */}
+                  }))}
+                  status={org.isActive ? "Active" : "Inactive"}
+                  onRequestSuccess={handleRequestSuccess} // Add success handler
+                />
+              </Box>
+            ))}
+          </Slider>
+        </div>
       </Box>
     </Container>
   );

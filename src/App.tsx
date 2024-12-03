@@ -1,3 +1,4 @@
+import React from 'react';
 import "./App.css";
 import { Outlet } from "react-router-dom";
 import { Box } from "@mui/material";
@@ -12,7 +13,7 @@ function App() {
     >
       <SnackbarProvider>
         <Navbar />
-        <main style={{ flex: 1 }}>
+        <main className="main-content">
           <Outlet />
         </main>
       </SnackbarProvider>

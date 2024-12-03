@@ -57,7 +57,7 @@ const MonthlyAreaChart = ({ year }: { year: number }) => {
     const fetchMonthlyOrders = async () => {
       try {
         const response = await getMonthlyOrders(year);
-        if (response.statuscode === 200 && response.data) {
+        if (response.statusCode === 200 && response.data) {
           const formattedData = formatData(response.data);
           setChartData(formattedData); // Update state with the formatted data
         }
